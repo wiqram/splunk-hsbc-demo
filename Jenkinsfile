@@ -49,7 +49,7 @@ pipeline {
                     echo 'Testing...'
                      snykSecurity(
                         snykInstallation: 'snyk',
-                        organisation: 'jeveenjacob', 
+                        //organisation: 'jeveenjacob', 
                         snykTokenId: 'fb073e5e-9899-45d4-b3ba-78b203b493e9',
                         failOnError: false, 
                         failOnIssues: false,
