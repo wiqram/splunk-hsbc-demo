@@ -49,7 +49,8 @@ pipeline {
                     echo 'Testing...'
                      snykSecurity(
                         snykInstallation: 'snyk',
-                        snykTokenId: 'b7503882-a832-4284-9b0b-17a4f20f2bb1',
+                        organisation: 'jeveenjacob', 
+                        snykTokenId: '34e37d85-0cd6-4aa6-a9c6-a14aa9f7c99b',
                         failOnError: false, 
                         failOnIssues: false,
                         targetFile: 'compiled.yaml'
