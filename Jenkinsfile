@@ -45,9 +45,7 @@ pipeline {
           }
       }*/
     stage('Scan') {
-         steps{
-               severity: 'medium', snykInstallation: 'snyk', snykTokenId: 'b7503882-a832-4284-9b0b-17a4f20f2bb1', targetFile: 'compiled.yaml' 
-         }
+               severity: 'medium', snykInstallation: 'snyk', snykTokenId: 'b7503882-a832-4284-9b0b-17a4f20f2bb1', targetFile: 'compiled.yaml'
     }
     stage('Deploy App') {
       steps {
