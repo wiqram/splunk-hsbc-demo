@@ -8,16 +8,16 @@ pipeline {
       }
     }
   stages {
-      /*stage('Delete App') {
+      stage('Delete App') {
           steps {
               script {
                   kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
-                  sleep(time:5,unit:"SECONDS")
+                  sleep(time:30,unit:"SECONDS")
                   //kubernetesDeploy(configs: "yolo-namespace.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
                   //sleep(time:3,unit:"SECONDS")
               }
           }
-      }*/
+      }
       /*stage('Copy App') {
           steps {
               echo "copying folder started"
