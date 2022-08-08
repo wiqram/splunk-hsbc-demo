@@ -45,8 +45,19 @@ pipeline {
           }
       }*/
     stage('Scan') {
-               severity: 'medium', snykInstallation: 'snyk', snykTokenId: 'b7503882-a832-4284-9b0b-17a4f20f2bb1', targetFile: 'compiled.yaml'
-    }
+               steps {
+                    echo 'Testing...'
+                     snykSecurity(
+                        snykInstallation: 'snyk',
+                        snykTokenId: 'b7503882-a832-4284-9b0b-17a4f20f2bb1',
+                        failOnError: false, 
+                        failOnIssues: false,
+                        targetFile: 'compiled.yaml'
+                        // place other parameters here
+                    )
+                }
+
+        }
     stage('Deploy App') {
       steps {
                script {
