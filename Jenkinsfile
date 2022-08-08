@@ -8,7 +8,7 @@ pipeline {
       }
     }
   stages {
-      stage('Delete App') {
+      /*stage('Delete App') {
           steps {
               script {
                   kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
@@ -17,7 +17,7 @@ pipeline {
                   //sleep(time:3,unit:"SECONDS")
               }
           }
-      }
+      }*/
       /*stage('Copy App') {
           steps {
               echo "copying folder started"
