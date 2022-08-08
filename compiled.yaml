@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: splunk
+  name: splunk
+  namespace: splunk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: splunk
+      io.kompose.service: splunk
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: splunk
+        io.kompose.service: splunk
+    spec:
+      containers:
+        #- args:
+        #  - redis-server
+        # - /usr/local/etc/redis/redis.conf
+        #- /redis/conf/redis.conf
+        - name: splunk
+          image: splunk/splunk
+          env:
+            - name: SPLUNK_START_ARGS
+              value: "--accept-license"
+            - name: SPLUNK_PASSWORD
+              value: "Password@1"
+#            - name: SPLUNK_USER
+#              value: root
+          ports:
+            - containerPort: 8000
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  #creationTimestamp: null
+  labels:
+    app: splunk
+    io.kompose.service: splunk
+  name: splunk
+  namespace: splunk
+spec:
+  type: NodePort
+  ports:
+    - name: "8000"
+      nodePort: 30008
+      port: 8000
+      targetPort: 8000
+  selector:
+    app: splunk
+    io.kompose.service: splunk
+status:
+  loadBalancer: {}
+---
