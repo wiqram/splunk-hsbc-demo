@@ -50,7 +50,7 @@ pipeline {
                      snykSecurity(
                         snykInstallation: 'snyk',
                         organisation: 'jeveenjacob', 
-                        snykTokenId: '34e37d85-0cd6-4aa6-a9c6-a14aa9f7c99b',
+                        snykTokenId: 'fb073e5e-9899-45d4-b3ba-78b203b493e9',
                         failOnError: false, 
                         failOnIssues: false,
                         targetFile: 'compiled.yaml'
