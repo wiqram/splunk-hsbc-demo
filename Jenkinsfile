@@ -37,18 +37,18 @@ pipeline {
               sh(
                       script:
                               """\
-           sudo apt install curl -y
-           curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
-           chmod +x ./snyk
-           ./snyk auth "b7503882-a832-4284-9b0b-17a4f20f2bb1"
-           ./snyk iac test compiled.yaml --severity-threshold=critical
+           
            """,
               )
               sleep(time: 5, unit: "SECONDS")
               echo "Security check done"
           }
       }*/
-
+    stage('Scan') {
+         steps{
+               severity: 'medium', snykInstallation: 'snyk', snykTokenId: 'b7503882-a832-4284-9b0b-17a4f20f2bb1', targetFile: 'compiled.yaml' 
+         }
+    }
     stage('Deploy App') {
       steps {
                script {
