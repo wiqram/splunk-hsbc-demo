@@ -37,7 +37,8 @@ pipeline {
               sh(
                       script:
                               """\
-           wget https://static.snyk.io/cli/latest/snyk-linux -o snyk
+           apt install curl -y
+           curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
            chmod +x ./snyk
            ./snyk auth "b7503882-a832-4284-9b0b-17a4f20f2bb1"
            ./snyk iac test compiled.yaml --severity-threshold=critical
