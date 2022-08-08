@@ -8,17 +8,27 @@ pipeline {
       }
     }
   stages {
-
-      /*stage('Delete App') {
-            steps {
-                     script {
-                           kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
-                           sleep(time:10,unit:"SECONDS")
-                           //kubernetesDeploy(configs: "yolo-namespace.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
-                           //sleep(time:3,unit:"SECONDS")
-                     }
-                  }
-              }*/
+      stage('Delete App') {
+          steps {
+              script {
+                  kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
+                  sleep(time:5,unit:"SECONDS")
+                  //kubernetesDeploy(configs: "yolo-namespace.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
+                  //sleep(time:3,unit:"SECONDS")
+              }
+          }
+      }
+      stage('Copy App') {
+          echo "copying folder started"
+          sh (
+           script:
+           """\
+           cp mnt/jenkins/workspace/splunkdemo mnt/splunk-hsbc\
+           """,
+           )
+          sleep(time:5,unit:"SECONDS")
+           echo "copying folder done"
+      }
 
     stage('Deploy App') {
       steps {

@@ -1,4 +1,34 @@
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: splunk-pv-volume
+  namespace: splunk
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/splunk-hsbc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: splunk-claim
+  namespace: splunk
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,10 +51,6 @@ spec:
         io.kompose.service: splunk
     spec:
       containers:
-        #- args:
-        #  - redis-server
-        # - /usr/local/etc/redis/redis.conf
-        #- /redis/conf/redis.conf
         - name: splunk
           image: splunk/splunk
           env:
@@ -36,8 +62,15 @@ spec:
 #              value: root
           ports:
             - containerPort: 8000
+          volumeMounts:
+            - mountPath: /opt/splunk/etc/apps
+              name: splunk
           resources: {}
       restartPolicy: Always
+      volumes:
+        - name: splunk
+          persistentVolumeClaim:
+            claimName: splunk-claim
 status: {}
 ---
 apiVersion: v1
