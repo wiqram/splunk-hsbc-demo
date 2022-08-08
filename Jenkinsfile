@@ -31,7 +31,7 @@ pipeline {
               echo "copying folder done"
           }
       }*/
-      stage('Security Check') {
+      /*stage('Security Check') {
           steps {
               echo "Security check initiated"
               sh(
@@ -47,7 +47,7 @@ pipeline {
               sleep(time: 5, unit: "SECONDS")
               echo "Security check done"
           }
-      }
+      }*/
 
     stage('Deploy App') {
       steps {
