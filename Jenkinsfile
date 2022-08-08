@@ -12,7 +12,7 @@ pipeline {
           steps {
               script {
                   kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
-                  sleep(time:5,unit:"SECONDS")
+                  sleep(time:30,unit:"SECONDS")
                   //kubernetesDeploy(configs: "yolo-namespace.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
                   //sleep(time:3,unit:"SECONDS")
               }
@@ -29,6 +29,23 @@ pipeline {
               )
               sleep(time: 5, unit: "SECONDS")
               echo "copying folder done"
+          }
+      }*/
+      /*stage('Security Check') {
+          steps {
+              echo "Security check initiated"
+              sh(
+                      script:
+                              """\
+           sudo apt install curl -y
+           curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
+           chmod +x ./snyk
+           ./snyk auth "b7503882-a832-4284-9b0b-17a4f20f2bb1"
+           ./snyk iac test compiled.yaml --severity-threshold=critical
+           """,
+              )
+              sleep(time: 5, unit: "SECONDS")
+              echo "Security check done"
           }
       }*/
 
