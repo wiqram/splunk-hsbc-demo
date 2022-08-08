@@ -19,15 +19,17 @@ pipeline {
           }
       }
       stage('Copy App') {
-          echo "copying folder started"
-          sh (
-           script:
-           """\
-           cp mnt/jenkins/workspace/splunkdemo mnt/splunk-hsbc\
+          steps {
+              echo "copying folder started"
+              sh(
+                      script:
+                              """\
+           cp -r mnt/jenkins/workspace/splunkdemo mnt/splunk-hsbc\
            """,
-           )
-          sleep(time:5,unit:"SECONDS")
-           echo "copying folder done"
+              )
+              sleep(time: 5, unit: "SECONDS")
+              echo "copying folder done"
+          }
       }
 
     stage('Deploy App') {
