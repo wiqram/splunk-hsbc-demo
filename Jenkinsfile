@@ -18,7 +18,7 @@ pipeline {
               }
           }
       }
-      stage('Copy App') {
+      /*stage('Copy App') {
           steps {
               echo "copying folder started"
               sh(
@@ -30,7 +30,7 @@ pipeline {
               sleep(time: 5, unit: "SECONDS")
               echo "copying folder done"
           }
-      }
+      }*/
 
     stage('Deploy App') {
       steps {
