@@ -53,7 +53,7 @@ pipeline {
                         snykTokenId: 'snyk',
                         failOnError: false, 
                         failOnIssues: false,
-                        targetFile: 'compiled.yaml'
+                        //targetFile: 'compiled.yaml'
                         // place other parameters here
                     )
                 }
