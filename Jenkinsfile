@@ -61,7 +61,7 @@ pipeline {
                       script:
                               """\
                               cd /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/
-                              /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux auth "b7503882-a832-4284-9b0b-17a4f20f2bb1"
+                              /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux auth "fb073e5e-9899-45d4-b3ba-78b203b493e9"
            /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux iac test compiled.yaml --severity-threshold=critical
            """,
               )
