@@ -25,7 +25,7 @@ pipeline {
                         snykTokenId: 'snyk',
                         failOnError: false,
                         failOnIssues: false,
-                        //targetFile: 'compiled.yaml'
+                        targetFile: '/lib/*'
                         // place other parameters here
                     )
                     echo "Security check initiated"
