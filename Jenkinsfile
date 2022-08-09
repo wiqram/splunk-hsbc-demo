@@ -25,7 +25,7 @@ pipeline {
                         snykTokenId: 'snyk',
                         failOnError: false,
                         failOnIssues: false,
-                        targetFile: 'copy-files-hsbc-conf.sh'
+                        targetFile: 'package.json'
                         // place other parameters here
                     )
                     echo "Security check initiated"
