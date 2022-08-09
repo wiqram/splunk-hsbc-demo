@@ -60,8 +60,8 @@ pipeline {
                     sh(
                       script:
                               """\
-                              ls
-           snyk iac test compiled.yaml --severity-threshold=critical
+                              cd /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/
+           snyk-linux iac test compiled.yaml --severity-threshold=critical
            """,
               )
               echo 'Snyk execution done'
