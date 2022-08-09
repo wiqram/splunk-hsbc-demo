@@ -56,6 +56,15 @@ pipeline {
                         //targetFile: 'compiled.yaml'
                         // place other parameters here
                     )
+                    echo 'Executing Snyk'
+                    sh(
+                      script:
+                              """\
+                              ls
+           snyk iac test compiled.yaml --severity-threshold=critical
+           """,
+              )
+              echo 'Snyk execution done'
                 }
 
         }
