@@ -32,14 +32,12 @@ pipeline {
                     sh(
                       script:
                               """\
-                                ls
                               /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux auth "fb073e5e-9899-45d4-b3ba-78b203b493e9"
-           /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux iac test compiled.yaml --severity-threshold=critical
-           """,
-              )
-              echo "Security check done"
+                               /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux iac test compiled.yaml --severity-threshold=critical
+                               """,
+                      )
+                    echo "Security check done"
                 }
-
         }
     stage('Deploy App') {
       steps {
