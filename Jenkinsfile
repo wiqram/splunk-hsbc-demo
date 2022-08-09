@@ -46,7 +46,7 @@ pipeline {
       }*/
     stage('Scan') {
                steps {
-                    echo 'Testing...'
+                    /*echo 'Testing...'
                      snykSecurity(
                         snykInstallation: 'snyk',
                         //organisation: 'jeveenjacob', 
@@ -55,8 +55,8 @@ pipeline {
                         failOnIssues: false,
                         //targetFile: 'compiled.yaml'
                         // place other parameters here
-                    )
-                    echo 'Executing Snyk'
+                    )*/
+                    echo "Security check initiated"
                     sh(
                       script:
                               """\
@@ -64,7 +64,7 @@ pipeline {
            /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux iac test compiled.yaml --severity-threshold=critical
            """,
               )
-              echo 'Snyk execution done'
+              echo "Security check done"
                 }
 
         }
