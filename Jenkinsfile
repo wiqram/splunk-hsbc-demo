@@ -16,8 +16,18 @@ pipeline {
               }
           }
       }
-    stage('Scan') {
+      stage('Scan') {
                steps {
+                    echo 'Testing...'
+                     snykSecurity(
+                        snykInstallation: 'snyk',
+                        //organisation: 'jeveenjacob',
+                        snykTokenId: 'snyk',
+                        failOnError: false,
+                        failOnIssues: false,
+                        //targetFile: 'compiled.yaml'
+                        // place other parameters here
+                    )
                     echo "Security check initiated"
                     sh(
                       script:
@@ -34,19 +44,10 @@ pipeline {
       steps {
                script {
                      kubernetesDeploy(configs: "splunk-namespace.yaml", kubeconfigId: "jenkins-kubeconfig-file")
+                     //kubernetesDeploy(configs: "publisher-deleter-cronjob.yaml", kubeconfigId: "jenkins-kubeconfig-file")
                      kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file")
                }
             }
         }
     }
 }
-/*echo 'Testing...'
-                    snykSecurity(
-                       snykInstallation: 'snyk',
-                       //organisation: 'jeveenjacob',
-                       snykTokenId: 'snyk',
-                       failOnError: false,
-                       failOnIssues: false,
-                       //targetFile: 'compiled.yaml'
-                       // place other parameters here
-                   )*/
