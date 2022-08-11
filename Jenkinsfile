@@ -8,7 +8,7 @@ pipeline {
       }
     }
   stages {
-      stage('Delete App') {
+      stage('Shutdown Splunk') {
           steps {
               script {
                   kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
@@ -16,7 +16,7 @@ pipeline {
               }
           }
       }
-      stage('Scan') {
+      stage('Vulnerability Scan') {
                steps {
                     echo 'Testing...'
                      snykSecurity(
@@ -39,7 +39,7 @@ pipeline {
                     echo "Security check done"
                 }
         }
-    stage('Deploy App') {
+    stage('Deploy Splunk Configs') {
       steps {
                script {
                      kubernetesDeploy(configs: "splunk-namespace.yaml", kubeconfigId: "jenkins-kubeconfig-file")
