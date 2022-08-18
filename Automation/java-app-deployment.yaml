@@ -1,0 +1,36 @@
+
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: mem-leak-java
+  labels:
+    app: mem-leak-java
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mem-leak-java
+  name: mem-leak-java
+  namespace: mem-leak-java
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mem-leak-java
+      io.kompose.service: mem-leak-java
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mem-leak-java
+        io.kompose.service: mem-leak-java
+    spec:
+      containers:
+        - name: mem-leak-java
+          image: jeveenj/mem-leak-java:latest
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xagent
+  labels:
+    app: xagent
+  namespace: mem-leak-java  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xagent
+  template:
+    metadata:
+      labels:
+        app: xagent
+    spec:
+      serviceAccountName: xmatters
+      containers:
+        - name: xagent
+          image: jeveenj/xmatteragent:latest
+          env:
+          - name: WEBSOCKET_HOST
+            value: "nttdemo.xmatters.com"
+          - name: WEBSOCKET_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: xagent-keys
+                key: WEBSOCKET_SECRET
+          - name: OWNER_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: xagent-keys
+                key: OWNER_API_KEY
+          - name: FRIENDLY_NAME
+            value: "xagent"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 300m
+              memory: 400Mi
