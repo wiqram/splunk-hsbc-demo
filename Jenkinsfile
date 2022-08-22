@@ -18,7 +18,7 @@ pipeline {
       }
      stage("install helm"){
         steps{
-             sh 'find -type f -name 'helm-v3.6.1-linux-amd64*' -delete'
+             sh 'find -type f -name "helm-v3.6.1-linux-amd64*" -delete'
              sh 'wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz'
              sh 'ls -a'
              sh 'tar -xvzf helm-v3.6.1-linux-amd64.tar.gz'
