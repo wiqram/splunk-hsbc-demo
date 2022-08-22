@@ -35,7 +35,7 @@ splunk-kubernetes-objects:
     name: splunk-kubernetes-objects
   kubernetes:
     insecureSSL: true
-    clusterName: splunk-connector
+    clusterName: splunk
   objects:
     core:
       v1:

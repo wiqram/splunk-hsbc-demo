@@ -200,7 +200,7 @@ get_helm_version() {
 }
 
 create_k8_namespace() {
-    kubectl create namespace "${KUBERNETES_NAMESPACE}"
+#    kubectl create namespace "${KUBERNETES_NAMESPACE}"
     kubectl label namespace "${KUBERNETES_NAMESPACE}" name="${KUBERNETES_NAMESPACE}"
 }
 
