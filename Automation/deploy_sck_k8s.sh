@@ -158,38 +158,38 @@ else
 fi
 
 # set the core kubernetes objects
-if [ -n "$CORE_OBJ" ]; then
-    kube_core_objects=$CORE_OBJ
-    IFS=','
-    map_in_lists=""
-    for each in $kube_core_objects
-    do
-        if [ "$each" == "events" ]; then
-            map_in_lists+="{\"name\":\"$each\", \"mode\":\"watch\"}"
-        else
-            map_in_lists+="{\"name\":\"$each\", \"interval\":\"60s\"}"
-        fi
-        map_in_lists+=","
-    done
-    sed_inplace "s/\${kubernetes_core_objects}/[$map_in_lists]/"  kubernetes_connect.yaml
-fi
+#if [ -n "$CORE_OBJ" ]; then
+#    kube_core_objects=$CORE_OBJ
+#    IFS=','
+#    map_in_lists=""
+#    for each in $kube_core_objects
+#    do
+#        if [ "$each" == "events" ]; then
+#            map_in_lists+="{\"name\":\"$each\", \"mode\":\"watch\"}"
+#        else
+#            map_in_lists+="{\"name\":\"$each\", \"interval\":\"60s\"}"
+#        fi
+#        map_in_lists+=","
+#    done
+#    sed_inplace "s/\${kubernetes_core_objects}/[$map_in_lists]/"  kubernetes_connect.yaml
+#fi
 
 # set the apps kubernetes objects
-if [ -n "$APPS_OBJ" ]; then
-    kube_apps_objects=$APPS_OBJ
-    IFS=','
-    map_in_lists=""
-    for each in $kube_apps_objects
-    do
-        map_in_lists+="{\"name\":\"$each\", \"interval\":\"60s\"},"
-    done
-    sed_inplace 's/${kubernetes_apps_objects_clause}/apps:\
-      v1:\
-        ${kubernetes_apps_objects}/' kubernetes_connect.yaml
-    sed_inplace "s/\${kubernetes_apps_objects}/[$map_in_lists]/" kubernetes_connect.yaml
-else
-    sed_inplace 's/ *${kubernetes_apps_objects_clause}//' kubernetes_connect.yaml
-fi
+#if [ -n "$APPS_OBJ" ]; then
+#    kube_apps_objects=$APPS_OBJ
+#    IFS=','
+#    map_in_lists=""
+#    for each in $kube_apps_objects
+#    do
+#        map_in_lists+="{\"name\":\"$each\", \"interval\":\"60s\"},"
+#    done
+#    sed_inplace 's/${kubernetes_apps_objects_clause}/apps:\
+#      v1:\
+#        ${kubernetes_apps_objects}/' kubernetes_connect.yaml
+#    sed_inplace "s/\${kubernetes_apps_objects}/[$map_in_lists]/" kubernetes_connect.yaml
+#else
+#    sed_inplace 's/ *${kubernetes_apps_objects_clause}//' kubernetes_connect.yaml
+#fi
 
 get_helm_version() {
     helm_version_output="$(helm version)"

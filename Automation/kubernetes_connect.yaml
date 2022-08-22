@@ -3,11 +3,14 @@ global:
   logLevel: info
   splunk:
     hec:
-      protocol: https
+      #protocol: https
+      protocol: http
       insecureSSL: true
-      host: 172.16.238.2
+      host: splunk.splunk.svc.cluster.local
+      #host: 172.16.238.2
       token: 25577715-5282-4f8b-ab9c-c8aa95a75bea
-      port: 30088
+      #port: 30088
+      port: 8088
 
 #local config for logging chart
 splunk-kubernetes-logging:
