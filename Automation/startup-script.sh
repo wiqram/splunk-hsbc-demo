@@ -27,21 +27,21 @@ files="kubernetes_connect_template.yaml" "deploy_sck_k8s.sh" && for each in "${f
 sleep 5 && echo " "
 
 echo "==> Build Java app image and push it to docker registry"
-docker compose -f java-app-docker-compose.yaml build
-docker compose -f java-app-docker-compose.yaml push 
+docker compose -f ./Automation/java-app-docker-compose.yaml build
+docker compose -f ./Automation/java-app-docker-compose.yaml push
 sleep 10 && echo " "
 
 echo "==> Deploying Java app in 'mem-leak-java' Namespace on Kubernetes env"
-kubectl apply -f java-app-deployment.yaml
+kubectl apply -f ./Automation/java-app-deployment.yaml
 
 # moving to xMatter location
 cd xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files
 echo " " && echo "==> Build xMatters agent image and push it to docker registery"
-docker compose -f xmatter-docker-compose.yaml build
-docker compose -f xmatter-docker-compose.yaml push 
+docker compose -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-docker-compose.yaml
+docker compose -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-docker-compose.yaml push
 sleep 10 && echo " "
 
 echo "==> Deploying roles, secret and xMatters agent in 'mem-leak-java' Namespace on Kubernetes env"
-kubectl apply -f xmatter-role.yaml
-kubectl apply -f kube/xagent-secrets.yaml
-kubectl apply -f kube/xagent-deploy.yaml
+kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-role.yaml
+kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml
+kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-deploy.yaml
