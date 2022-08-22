@@ -22,26 +22,29 @@ export KUBERNETES_NAMESPACE='splunk-connector'
 export CORE_OBJ='pods,nodes,component_statuses,config_maps,namespaces,persistent_volumes,persistent_volume_claims,resource_quotas,services,service_accounts,events' 
 export APPS_OBJ='daemon_sets,deployments,replica_sets,stateful_sets' 
 
+cd Automation
 echo "==> Setting up Splunk connect for Kubernetes"
-files="kubernetes_connect_template.yaml" "deploy_sck_k8s.sh" && for each in "${files[@]}"; do wget -O- --no-check-certificate http://splunk.traderyolo.com/en-US/static/app/splunk_app_infrastructure/kubernetes_connect/"$each" > $each; done && wget https://github.com/splunk/splunk-connect-for-kubernetes/releases/download/1.3.0/splunk-connect-for-kubernetes-1.3.0.tgz -O splunk-connect-for-kubernetes.tgz && bash deploy_sck_k8s.sh
+#files="kubernetes_connect_template.yaml" "deploy_sck_k8s.sh" && for each in "${files[@]}"; do wget -O- --no-check-certificate http://splunk.traderyolo.com/en-US/static/app/splunk_app_infrastructure/kubernetes_connect/"$each" > $each; done && wget https://github.com/splunk/splunk-connect-for-kubernetes/releases/download/1.3.0/splunk-connect-for-kubernetes-1.3.0.tgz -O splunk-connect-for-kubernetes.tgz && bash deploy_sck_k8s.sh
+files="kubernetes_connect_template.yaml" "deploy_sck_k8s.sh" && for each in "${files[@]}"; do wget -O- https://splunk.traderyolo.com/en-US/static/app/splunk_app_infrastructure/kubernetes_connect/"$each" > $each; done && wget https://github.com/splunk/splunk-connect-for-kubernetes/releases/download/1.3.0/splunk-connect-for-kubernetes-1.3.0.tgz -O splunk-connect-for-kubernetes.tgz && sh deploy_sck_k8s.sh
 sleep 5 && echo " "
 
 echo "==> Build Java app image and push it to docker registry"
-#docker compose -f ./Automation/java-app-docker-compose.yaml build
-#docker compose -f ./Automation/java-app-docker-compose.yaml push
+#docker compose -f ./java-app-docker-compose.yaml build
+#docker compose -f ./java-app-docker-compose.yaml push
 sleep 10 && echo " "
 
 echo "==> Deploying Java app in 'mem-leak-java' Namespace on Kubernetes env"
-#kubectl apply -f ./Automation/java-app-deployment.yaml
+kubectl apply -f ./namespace-mem-leak.yaml
+#kubectl apply -f ./java-app-deployment.yaml
 
 # moving to xMatter location
-cd xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files
+#cd xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files
 echo " " && echo "==> Build xMatters agent image and push it to docker registery"
-#docker compose -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-docker-compose.yaml
-#docker compose -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-docker-compose.yaml push
+#docker compose -f ./xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-docker-compose.yaml
+#docker compose -f ./xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-docker-compose.yaml push
 sleep 10 && echo " "
 
 echo "==> Deploying roles, secret and xMatters agent in 'mem-leak-java' Namespace on Kubernetes env"
-kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-role.yaml
-kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml
-kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-deploy.yaml
+kubectl apply -f ./xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-role.yaml
+kubectl apply -f ./xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml
+kubectl apply -f ./xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-deploy.yaml
