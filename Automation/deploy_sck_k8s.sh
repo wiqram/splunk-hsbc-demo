@@ -192,9 +192,11 @@ fi
 #fi
 
 get_helm_version() {
-    helm_version_output="$(helm version)"
+    #helm_version_output="$(helm version)"
     # extract and echo the major version number: SemVer:"v2.14.3" or Version:"v3.0.0"
-    [[ "$helm_version_output" =~ v([0-9]{1,2})\. ]] && echo "${BASH_REMATCH[1]}"
+    #[[ "$helm_version_output" =~ v([0-9]{1,2})\. ]] && echo "${BASH_REMATCH[1]}"
+#    [[ "$helm_version_output" =~ v3\. ]] && echo "${BASH_REMATCH[1]}"
+    echo ""
 }
 
 create_k8_namespace() {
