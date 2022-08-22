@@ -55,13 +55,13 @@ if ! hash helm 2>/dev/null; then
 fi
 
 # rename yaml file
-if [ -f "kubernetes_connect_template.yaml" ]; then
-    # rename yaml file
-    mv kubernetes_connect_template.yaml kubernetes_connect.yaml
-else
-    echo "kubernetes_connect_template.yaml was not downloaded. Exiting..."
-    exit 1
-fi
+#if [ -f "kubernetes_connect_template.yaml" ]; then
+#    # rename yaml file
+#    mv kubernetes_connect_template.yaml kubernetes_connect.yaml
+#else
+#    echo "kubernetes_connect_template.yaml was not downloaded. Exiting..."
+#    exit 1
+#fi
 
 # update template with user defined values
 if [ -n "$MONITORING_MACHINE" ]; then
