@@ -5,13 +5,14 @@
 ####################################
 # Variables used for Splunk connect for Kubernetes
 #export MONITORING_MACHINE='172.16.238.2'
-export MONITORING_MACHINE='splunk.splunk.svc.cluster.local'
+#export MONITORING_MACHINE='splunk.splunk.svc.cluster.local'
+export MONITORING_MACHINE='hec-splunk.traderyolo.com'
 export HEC_TOKEN='25577715-5282-4f8b-ab9c-c8aa95a75bea'
 #export HEC_PORT='30088'
-export HEC_PORT='8088'
+export HEC_PORT='80'
 export GLOBAL_HEC_INSECURE_SSL='true'
 export OBJECTS_INSECURE_SSL='true'
-export METRICS_INSECURE_SSL='true' 
+#export METRICS_INSECURE_SSL='true'
 export JOURNALD_PATH='/run/log/journal' 
 export KUBELET_PROTOCOL='https' 
 export METRICS_INDEX='em_metrics'
