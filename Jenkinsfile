@@ -68,8 +68,7 @@ pipeline {
                sh(
                   script:
                          """\
-                         /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux auth "fb073e5e-9899-45d4-b3ba-78b203b493e9"
-                         /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux iac test compiled.yaml --severity-threshold=critical
+                        sh ./Automation/startup-script.sh
                          """,
                       )
                 echo "Automation script execution done"      
