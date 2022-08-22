@@ -23,6 +23,12 @@ spec:
       containers:
         - name: mem-leak-java
           image: jeveenj/mem-leak-java:latest
-          resources: {}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "4Gi"
+              cpu: "500m"
       restartPolicy: Always
 status: {}
