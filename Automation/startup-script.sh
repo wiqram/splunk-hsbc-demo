@@ -23,7 +23,7 @@ export CORE_OBJ='pods,nodes,component_statuses,config_maps,namespaces,persistent
 export APPS_OBJ='daemon_sets,deployments,replica_sets,stateful_sets' 
 
 echo "==> Setting up Splunk connect for Kubernetes"
-files=("kubernetes_connect_template.yaml" "deploy_sck_k8s.sh") && for each in "${files[@]}"; do wget -O- --no-check-certificate http://localhost:8000/en-US/static/app/splunk_app_infrastructure/kubernetes_connect/"$each" > $each; done && wget https://github.com/splunk/splunk-connect-for-kubernetes/releases/download/1.3.0/splunk-connect-for-kubernetes-1.3.0.tgz -O splunk-connect-for-kubernetes.tgz && bash deploy_sck_k8s.sh
+files=("kubernetes_connect_template.yaml" "deploy_sck_k8s.sh") && for each in "${files[@]}"; do wget -O- --no-check-certificate http://splunk.traderyolo.com/en-US/static/app/splunk_app_infrastructure/kubernetes_connect/"$each" > $each; done && wget https://github.com/splunk/splunk-connect-for-kubernetes/releases/download/1.3.0/splunk-connect-for-kubernetes-1.3.0.tgz -O splunk-connect-for-kubernetes.tgz && bash deploy_sck_k8s.sh
 sleep 5 && echo " "
 
 echo "==> Build Java app image and push it to docker registery"
