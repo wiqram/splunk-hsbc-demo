@@ -62,6 +62,15 @@ spec:
 #              value: root
           ports:
             - containerPort: 8000
+              name: ui
+            - containerPort: 8065
+              name: app-server
+            - containerPort: 8088
+              name: hec
+            - containerPort: 8089
+              name: management
+            - containerPort: 9997
+              name: receiving
           volumeMounts:
             - mountPath: /opt/splunk/etc/apps
               name: splunk
@@ -85,10 +94,18 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - name: "8000"
+    - name: "ui"
       nodePort: 30008
       port: 8000
       targetPort: 8000
+    - name: "hec"
+      nodePort: 30088
+      port: 8088
+      targetPort: 8088
+    - name: "receiving"
+      nodePort: 30097
+      port: 9997
+      targetPort: 9997
   selector:
     app: splunk
     io.kompose.service: splunk
