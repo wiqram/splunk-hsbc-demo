@@ -89,7 +89,9 @@ pipeline {
                }
             }
         }
-        stage('Build and Push Docker Images') {
+       /*
+       JEVEEN TO WORK ON THIS DOCKER COMPOSE STEP OF PIPELINE
+       stage('Build and Push Docker Images') {
              agent {
                     kubernetes {
                         cloud 'kubernetes'
@@ -101,7 +103,7 @@ pipeline {
                        //docker compose build -d file
                        //docker compose push -f file
                     }
-                }
+                } */
     stage('Automation infra deployment') {
      agent {
             kubernetes {
