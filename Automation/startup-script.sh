@@ -21,7 +21,7 @@ export HELM_RELEASE_NAME='helm'
 export KUBERNETES_NAMESPACE='splunk-connector'
 export CORE_OBJ='pods,nodes,component_statuses,config_maps,namespaces,persistent_volumes,persistent_volume_claims,resource_quotas,services,service_accounts,events' 
 export APPS_OBJ='daemon_sets,deployments,replica_sets,stateful_sets' 
-
+export PATH="$PATH:/home/jenkins/workspace/splunkdemo/linux-amd64/helm"
 cd Automation
 echo "==> Setting up Splunk connect for Kubernetes"
 #files="kubernetes_connect_template.yaml" "deploy_sck_k8s.sh" && for each in "${files[@]}"; do wget -O- --no-check-certificate http://splunk.traderyolo.com/en-US/static/app/splunk_app_infrastructure/kubernetes_connect/"$each" > $each; done && wget https://github.com/splunk/splunk-connect-for-kubernetes/releases/download/1.3.0/splunk-connect-for-kubernetes-1.3.0.tgz -O splunk-connect-for-kubernetes.tgz && bash deploy_sck_k8s.sh
