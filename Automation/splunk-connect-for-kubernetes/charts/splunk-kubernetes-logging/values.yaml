@@ -1,0 +1,175 @@
+global:
+  logLevel: info
+  splunk:
+    hec:
+      protocol: https
+      insecureSSL: false
+      indexRouting: null
+      indexRoutingDefaultIndex: null
+  kubernetes:
+    clusterName: cluster_name
+  prometheus_enabled: true
+  fluentd:
+    path: /var/log/containers/*.log
+    exclude_path: null
+logLevel: null
+containers:
+  path: /var/log
+  pathDest: /var/lib/docker/containers
+  logFormatType: json
+  logFormat: null
+serviceAccount:
+  create: true
+  name: null
+  usePullSecrets: false
+splunk:
+  hec:
+    host: null
+    port: null
+    token: null
+    protocol: null
+    indexName: null
+    insecureSSL: null
+    clientCert: null
+    clientKey: null
+    caFile: null
+    indexRouting: null
+    indexRoutingDefaultIndex: null
+  ingest_api:
+    serviceClientIdentifier: null
+    serviceClientSecretKey: null
+    tokenEndpoint: null
+    ingestAPIHost: null
+    tenant: null
+    eventsEndpoint: null
+    debugIngestAPI: false
+secret:
+  create: true
+  name: null
+journalLogPath: /run/log/journal
+logs:
+  docker:
+    from:
+      journald:
+        unit: docker.service
+    timestampExtraction:
+      regexp: time="(?<time>\d{4}-\d{2}-\d{2}T[0-2]\d:[0-5]\d:[0-5]\d.\d{9}Z)"
+      format: '%Y-%m-%dT%H:%M:%S.%NZ'
+    sourcetype: kube:docker
+  kubelet:
+    from:
+      journald:
+        unit: kubelet.service
+    timestampExtraction:
+      regexp: \w(?<time>[0-1]\d[0-3]\d [^\s]*)
+      format: '%m%d %H:%M:%S.%N'
+    multiline:
+      firstline: /^\w[0-1]\d[0-3]\d/
+    sourcetype: kube:kubelet
+  etcd:
+    from:
+      pod: etcd-server
+      container: etcd-container
+    timestampExtraction:
+      regexp: (?<time>\d{4}-\d{2}-\d{2} [0-2]\d:[0-5]\d:[0-5]\d\.\d{6})
+      format: '%Y-%m-%d %H:%M:%S.%N'
+    sourcetype: kube:etcd
+  etcd-minikube:
+    from:
+      pod: etcd-minikube
+      container: etcd
+    timestampExtraction:
+      regexp: (?<time>\d{4}-\d{2}-\d{2} [0-2]\d:[0-5]\d:[0-5]\d\.\d{6})
+      format: '%Y-%m-%d %H:%M:%S.%N'
+    sourcetype: kube:etcd
+  etcd-events:
+    from:
+      pod: etcd-server-events
+      container: etcd-container
+    timestampExtraction:
+      regexp: (?<time>\d{4}-[0-1]\d-[0-3]\d [0-2]\d:[0-5]\d:[0-5]\d\.\d{6})
+      format: '%Y-%m-%d %H:%M:%S.%N'
+    sourcetype: kube:etcd-events
+  kube-apiserver:
+    from:
+      pod: kube-apiserver
+    sourcetype: kube:kube-apiserver
+  kube-scheduler:
+    from:
+      pod: kube-scheduler
+    sourcetype: kube:kube-scheduler
+  kube-controller-manager:
+    from:
+      pod: kube-controller-manager
+    sourcetype: kube:kube-controller-manager
+  kube-proxy:
+    from:
+      pod: kube-proxy
+    sourcetype: kube:kube-proxy
+  kubedns:
+    from:
+      pod: kube-dns
+    sourcetype: kube:kubedns
+  dnsmasq:
+    from:
+      pod: kube-dns
+    sourcetype: kube:dnsmasq
+  dns-sidecar:
+    from:
+      pod: kube-dns
+      container: sidecar
+    sourcetype: kube:kubedns-sidecar
+  dns-minikube:
+    from:
+      pod: coredns
+      container: coredns
+    sourcetype: kube:dns-controller
+  dns-controller:
+    from:
+      pod: dns-controller
+    sourcetype: kube:dns-controller
+  kube-dns-autoscaler:
+    from:
+      pod: kube-dns-autoscaler
+      container: autoscaler
+    sourcetype: kube:kube-dns-autoscaler
+  kube-audit:
+    from:
+      file:
+        path: /var/log/kube-apiserver-audit.log
+    timestampExtraction:
+      format: '%Y-%m-%dT%H:%M:%SZ'
+    sourcetype: kube:apiserver-audit
+image:
+  registry: docker.io
+  name: splunk/fluentd-hec
+  tag: 1.2.0
+  pullPolicy: Always
+  usePullSecret: false
+  pullsecretName: null
+resources:
+  requests:
+    cpu: 100m
+    memory: 200Mi
+buffer:
+  '@type': memory
+  total_limit_size: 600m
+  chunk_limit_size: 200m
+  chunk_limit_records: 100000
+  flush_interval: 5s
+  flush_thread_count: 1
+  overflow_action: block
+  retry_max_times: 3
+tolerations:
+- key: node-role.kubernetes.io/master
+  effect: NoSchedule
+nodeSelector:
+  beta.kubernetes.io/os: linux
+affinity: {}
+priorityClassName: null
+kubernetes:
+  clusterName: null
+  openshift: false
+customMetadata: null
+customFilters: {}
+indexFields: []
