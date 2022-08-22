@@ -6,7 +6,7 @@ global:
       #protocol: https
       protocol: http
       insecureSSL: true
-      host: http://splunk.splunk.svc.cluster.local
+      host: splunk.splunk.svc.cluster.local
       #host: hec-splunk.traderyolo.com
       #host: 172.16.238.2
       token: 25577715-5282-4f8b-ab9c-c8aa95a75bea
