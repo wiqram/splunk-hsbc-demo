@@ -1,0 +1,90 @@
+global:
+  logLevel: info
+  splunk:
+    hec:
+      port: 8088
+      protocol: https
+      insecureSSL: false
+  kubernetes:
+    clusterName: cluster_name
+logLevel: null
+rbac:
+  create: true
+serviceAccount:
+  create: true
+  name: null
+  usePullSecrets: false
+splunk:
+  hec:
+    host: null
+    port: null
+    token: null
+    protocol: null
+    indexName: null
+    insecureSSL: null
+    clientCert: null
+    clientKey: null
+    caFile: null
+secret:
+  create: true
+  name: null
+image:
+  registry: docker.io
+  name: splunk/k8s-metrics
+  tag: 1.1.2
+  pullPolicy: Always
+  usePullSecret: false
+  pullsecretName: null
+imageAgg:
+  registry: docker.io
+  name: splunk/k8s-metrics-aggr
+  tag: 1.1.1
+  pullPolicy: Always
+  usePullSecret: false
+  pullsecretName: null
+resources:
+  fluent:
+    limits:
+      cpu: 200m
+      memory: 300Mi
+    requests:
+      cpu: 200m
+      memory: 300Mi
+buffer:
+  '@type': memory
+  total_limit_size: 400m
+  chunk_limit_size: 100m
+  chunk_limit_records: 10000
+  flush_interval: 5s
+  flush_thread_count: 1
+  overflow_action: block
+  retry_max_times: 3
+aggregatorBuffer:
+  '@type': memory
+  total_limit_size: 400m
+  chunk_limit_size: 100m
+  chunk_limit_records: 10000
+  flush_interval: 5s
+  flush_thread_count: 1
+  overflow_action: block
+  retry_max_times: 3
+metricsInterval: 15s
+nodeSelector:
+  beta.kubernetes.io/os: linux
+tolerations:
+- key: node-role.kubernetes.io/master
+  effect: NoSchedule
+aggregatorTolerations: {}
+priorityClassName: null
+affinity: {}
+kubernetes:
+  kubeletAddress: null
+  kubeletPort: null
+  useRestClientSSL: true
+  insecureSSL: false
+  caFile: null
+  bearerTokenFile: null
+  secretDir: null
+  clusterName: null
+  openshift: false
+  customFilters: {}

@@ -1,0 +1,79 @@
+global:
+  logLevel: info
+  splunk:
+    hec:
+      protocol: https
+      port: 8088
+      insecureSSL: false
+      indexRouting: null
+  kubernetes:
+    clusterName: cluster_name
+logLevel: null
+rbac:
+  create: true
+serviceAccount:
+  create: true
+  name: null
+  usePullSecrets: false
+kubernetes:
+  url: null
+  insecureSSL: false
+  clientCert: null
+  clientKey: null
+  caFile: null
+  bearerTokenFile: null
+  secretDir: null
+  clusterName: null
+  openshift: false
+objects:
+  core:
+    v1:
+    - name: pods
+    - name: namespaces
+    - name: nodes
+    - name: events
+      mode: watch
+checkpointFile:
+  name: kubernetes-objects.pos
+  volume: null
+splunk:
+  hec:
+    host: null
+    token: null
+    protocol: null
+    indexName: null
+    insecureSSL: null
+    clientCert: null
+    clientKey: null
+    caFile: null
+    caPath: null
+    indexRouting: null
+secret:
+  create: true
+  name: null
+image:
+  registry: docker.io
+  name: splunk/kube-objects
+  tag: 1.1.2
+  pullPolicy: Always
+  usePullSecret: false
+  pullSecretName: null
+resources:
+  requests:
+    cpu: 100m
+    memory: 200Mi
+buffer:
+  '@type': memory
+  total_limit_size: 600m
+  chunk_limit_size: 200m
+  chunk_limit_records: 10000
+  flush_interval: 3s
+  flush_thread_count: 1
+  overflow_action: block
+  retry_max_times: 3
+nodeSelector:
+  beta.kubernetes.io/os: linux
+tolerations: []
+affinity: {}
+customFilters: {}
+indexFields: []
