@@ -5,7 +5,7 @@
 ####################################
 # Variables used for Splunk connect for Kubernetes
 export MONITORING_MACHINE='192.168.0.18'
-export HEC_TOKEN='fbad5606-b132-4e5d-9a92-85ab316ed1f8' 
+export HEC_TOKEN='25577715-5282-4f8b-ab9c-c8aa95a75bea' 
 export HEC_PORT='8088' 
 export GLOBAL_HEC_INSECURE_SSL='true' 
 export OBJECTS_INSECURE_SSL='true'
