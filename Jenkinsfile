@@ -1,17 +1,26 @@
 pipeline {
-  agent //any
+  /* agent //any
    {
     kubernetes {
         cloud 'kubernetes'
         label 'kubeagent'
         defaultContainer 'jnlp'
       }
-    }
+    } */
+    agent none
   stages {
       stage('Shutdown Splunk') {
+       agent {
+              kubernetes {
+                  cloud 'kubernetes'
+                  label 'kubeagent'
+                  defaultContainer 'jnlp'
+                }
+             }
           steps {
               script {
-                  kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
+                  //kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file", deleteResource: true)
+                  sh 'kubectl delete --ignore-not-found=true -f compiled.yaml'
                   sleep(time:30,unit:"SECONDS")
               }
           }
@@ -32,45 +41,85 @@ pipeline {
         }
     } */
       stage('Vulnerability Scan') {
-               steps {
-                    echo 'Testing...'
-                     snykSecurity(
-                        snykInstallation: 'snyk',
-                        //organisation: 'jeveenjacob',
-                        snykTokenId: 'snyk',
-                        failOnError: false,
-                        failOnIssues: false,
-                        targetFile: 'package.json'
-                        // place other parameters here
-                    )
-                    echo "Security check initiated"
-                    sh(
-                      script:
-                              """\
-                              /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux auth "fb073e5e-9899-45d4-b3ba-78b203b493e9"
-                               /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux iac test compiled.yaml --severity-threshold=critical
-                               """,
-                      )
-                    echo "Security check done"
+       agent {
+              kubernetes {
+                  cloud 'kubernetes'
+                  label 'kubeagent'
+                  defaultContainer 'jnlp'
                 }
+             }
+       steps {
+            echo 'Testing...'
+             snykSecurity(
+                snykInstallation: 'snyk',
+                //organisation: 'jeveenjacob',
+                snykTokenId: 'snyk',
+                failOnError: false,
+                failOnIssues: false,
+                targetFile: 'package.json'
+                // place other parameters here
+            )
+            echo "Security check initiated"
+            sh(
+              script:
+                      """\
+                      /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux auth "fb073e5e-9899-45d4-b3ba-78b203b493e9"
+                       /home/jenkins/tools/io.snyk.jenkins.tools.SnykInstallation/snyk/snyk-linux iac test compiled.yaml --severity-threshold=critical
+                       """,
+              )
+            echo "Security check done"
+        }
         }
     stage('Deploy Splunk Configs') {
+     agent {
+            kubernetes {
+                cloud 'kubernetes'
+                label 'kubeagent'
+                defaultContainer 'jnlp'
+              }
+           }
       steps {
                script {
-                     kubernetesDeploy(configs: "splunk-namespace.yaml", kubeconfigId: "jenkins-kubeconfig-file")
+                     //kubernetesDeploy(configs: "splunk-namespace.yaml", kubeconfigId: "jenkins-kubeconfig-file")
                      //kubernetesDeploy(configs: "publisher-deleter-cronjob.yaml", kubeconfigId: "jenkins-kubeconfig-file")
-                     kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file")
+                     //kubernetesDeploy(configs: "compiled.yaml", kubeconfigId: "jenkins-kubeconfig-file")
+                     sh 'kubectl apply -f splunk-namespace.yaml'
+                     sh 'kubectl apply -f compiled.yaml'
                      sleep(time:30,unit:"SECONDS")
                }
             }
         }
+        stage('Build and Push Docker Images') {
+             agent {
+                    kubernetes {
+                        cloud 'kubernetes'
+                        label 'kubeagent'
+                        defaultContainer 'jnlp'
+                      }
+                   }
+              steps {
+                       //docker compose build -d file
+                       //docker compose push -f file
+                    }
+                }
     stage('Automation infra deployment') {
+     agent {
+            kubernetes {
+                cloud 'kubernetes'
+                label 'kubeagent'
+                defaultContainer 'jnlp'
+              }
+           }
       steps {
                echo "Automation script execution started"
                sh(
                   script:
                          """\
-                        sh ./Automation/startup-script.sh
+                        kubectl apply -f ./Automation/namespace-mem-leak.yaml
+                        kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/xmatter-role.yaml
+                        kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml
+                        kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-deploy.yaml
+                        kubectl apply -f ./Automation/java-app-deployment.yaml
                          """,
                       )
                 echo "Automation script execution done"      
