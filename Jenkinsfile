@@ -9,7 +9,7 @@ pipeline {
     } */
     agent none
   stages {
-      stage('Shutdown Splunk') {
+      /* stage('Shutdown Splunk') {
        agent {
               kubernetes {
                   cloud 'kubernetes'
@@ -24,7 +24,7 @@ pipeline {
                   sleep(time:30,unit:"SECONDS")
               }
           }
-      }
+      } */
      /* stage("install helm"){
         steps{
              sh 'find -type f -name "helm-v3.6.1-linux-amd64*" -delete'
@@ -40,7 +40,7 @@ pipeline {
              sh 'helm version' *//*
         }
     } */
-      stage('Vulnerability Scan') {
+      /* stage('Vulnerability Scan') {
        agent {
               kubernetes {
                   cloud 'kubernetes'
@@ -69,8 +69,8 @@ pipeline {
               )
             echo "Security check done"
         }
-        }
-    stage('Deploy Splunk Configs') {
+        } */
+    /* stage('Deploy Splunk Configs') {
      agent {
             kubernetes {
                 cloud 'kubernetes'
@@ -88,7 +88,7 @@ pipeline {
                      sleep(time:30,unit:"SECONDS")
                }
             }
-        }
+        } */
        /*
        JEVEEN TO WORK ON THIS DOCKER COMPOSE STEP OF PIPELINE
        stage('Build and Push Docker Images') {
