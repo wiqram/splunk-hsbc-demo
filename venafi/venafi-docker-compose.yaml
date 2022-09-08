@@ -1,0 +1,5 @@
+version: '3'
+services:
+  venafi-sample:
+    build: .
+    image: jeveenj/venafi-cert-renew

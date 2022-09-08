@@ -1,0 +1,36 @@
+
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: venafi
+  labels:
+    app: venafi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: venafi
+  name: venafi
+  namespace: venafi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mem-leak-java
+      io.kompose.service: mem-leak-java
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mem-leak-java
+        io.kompose.service: mem-leak-java
+    spec:
+      containers:
+        - name: venafi
+          image: jeveenj/venafi-cert-renew:latest
+          resources: {}
+      restartPolicy: Always
+status: {}
