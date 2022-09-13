@@ -14,6 +14,8 @@ pipeline {
              //sh 'sed -i -e "s/WEBSOCKET_SECRET.*/WEBSOCKET_SECRET: $web/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml'
              //sh 'sed -i -e "s/OWNER_API_KEY.*/OWNER_API_KEY: $owner/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml'
              sh 'echo "reading files now ......................."'
+             sh 'pwd'
+             sh 'ls'
              sh 'cat xagent-secrets.yaml'
         }
     } 
