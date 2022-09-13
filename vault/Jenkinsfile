@@ -18,7 +18,7 @@ pipeline {
              sh 'ls'
              sh 'cd Automation'
              sh 'ls'
-             //sh 'cat xagent-secrets.yaml'
+             sh 'cat Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml'
         }
     } 
     stage('xMatters Stage') {
