@@ -3,7 +3,8 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: venafi
+  #name: venafi
+  name: mem-leak-java
   labels:
     app: venafi
 ---
@@ -13,20 +14,21 @@ metadata:
   labels:
     app: venafi
   name: venafi
-  namespace: venafi
+  #namespace: venafi
+  namespace: mem-leak-java
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mem-leak-java
-      io.kompose.service: mem-leak-java
+      app: venafi
+      io.kompose.service: venafi
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: mem-leak-java
-        io.kompose.service: mem-leak-java
+        app: venafi
+        io.kompose.service: venafi
     spec:
       containers:
         - name: venafi
