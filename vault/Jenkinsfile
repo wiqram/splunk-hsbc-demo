@@ -7,7 +7,7 @@ pipeline {
              sh 'export VAULT_TOKEN="hvs.zr8f9m7uiHS3X1vXwt6RHhdj"'
              sh 'pwd'
              sh 'ls'
-             sh 'cd Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube'
+             sh 'cd Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/'
              //sh 'curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/kv/data/yolo/xmatters > out.json'
              //sh 'web=`cat out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*$\'`'
              //sh 'owner=`cat out.json | grep -o \'"OWNER_API_KEY":"[^"]*\' | grep -o \'[^"]*$\'`'
@@ -16,7 +16,9 @@ pipeline {
              sh 'echo "reading files now ......................."'
              sh 'pwd'
              sh 'ls'
-             sh 'cat xagent-secrets.yaml'
+             sh 'cd Automation'
+             sh 'ls'
+             //sh 'cat xagent-secrets.yaml'
         }
     } 
     stage('xMatters Stage') {
