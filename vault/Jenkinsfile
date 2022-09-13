@@ -9,7 +9,7 @@ pipeline {
         steps{
              sh """#!/bin/bash
                    curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/kv/data/yolo/xmatters > out.json
-                   WEB=`cat vault/out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
+                   WEB="test" #`cat vault/out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
                    echo \$WEB
                    #WEB=`cat out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
                    #OWNER=`cat out.json | grep -o \'"OWNER_API_KEY":"[^"]*\' | grep -o \'[^"]*\$\'`
