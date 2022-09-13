@@ -5,14 +5,13 @@ pipeline {
         steps{
              sh 'export VAULT_ADDR="https://vault.traderyolo.com"'
              sh 'export VAULT_TOKEN="hvs.zr8f9m7uiHS3X1vXwt6RHhdj"'
-             //sh 'curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/kv/data/yolo/xmatters > out.json'
-             //sh 'web=`cat out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*$\'`'
-             //sh 'owner=`cat out.json | grep -o \'"OWNER_API_KEY":"[^"]*\' | grep -o \'[^"]*$\'`'
-             //sh 'sed -i -e "s/WEBSOCKET_SECRET.*/WEBSOCKET_SECRET: $web/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml'
-             //sh 'sed -i -e "s/OWNER_API_KEY.*/OWNER_API_KEY: $owner/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml'
-             sh 'sed -i -e "s/OWNER_API_KEY.*/OWNER_API_KEY: Jeveen/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml'
+             sh 'curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/kv/data/yolo/xmatters > out.json'
+             sh 'web=`cat out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*$\'`'
+             sh 'owner=`cat out.json | grep -o \'"OWNER_API_KEY":"[^"]*\' | grep -o \'[^"]*$\'`'
+             sh 'sed -i -e "s/WEBSOCKET_SECRET.*/WEBSOCKET_SECRET: $web/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml'
+             sh 'sed -i -e "s/OWNER_API_KEY.*/OWNER_API_KEY: $owner/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml'
              sh 'cat Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml'
-             sh 'exit'
+             sh 'echo "remove below command....."'
              sh 'sdadansdlak'
         }
     } 
