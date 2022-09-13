@@ -9,15 +9,12 @@ pipeline {
         steps{
              sh """#!/bin/bash
                    curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/kv/data/yolo/xmatters > out.json
-                   WEB="test" #`cat vault/out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
-                   echo \$WEB
-                   #WEB=`cat out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
-                   #OWNER=`cat out.json | grep -o \'"OWNER_API_KEY":"[^"]*\' | grep -o \'[^"]*\$\'`
+                   #WEB="test" #`cat vault/out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
+                   WEB=`cat out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
+                   OWNER=`cat out.json | grep -o \'"OWNER_API_KEY":"[^"]*\' | grep -o \'[^"]*\$\'`
                    sed -i -e "s/WEBSOCKET_SECRET.*/WEBSOCKET_SECRET: \$WEB/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml
-                   sdadansdlak
                    sed -i -e "s/OWNER_API_KEY.*/OWNER_API_KEY: \$OWNER/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml
-                   cat Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml
-                   
+                   cat Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml 
              """
         }
     } 
