@@ -2,14 +2,14 @@ pipeline {
     agent any
     environment {
        VAULT_ADDR = "https://vault.traderyolo.com"  //can be used in whole pipeline
-       VAULT_TOKEN = "hvs.zr8f9m7uiHS3X1vXwt6RHhdj"
+       VAULT_TOKEN = credentials('vault_secret')
    }
   stages {
      stage("Get secret"){
         steps{
              sh """#!/bin/bash
                    curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/kv/data/yolo/xmatters > out.json
-                   #WEB="test" #`cat vault/out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
+                   cat out.json
                    WEB=`cat out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
                    OWNER=`cat out.json | grep -o \'"OWNER_API_KEY":"[^"]*\' | grep -o \'[^"]*\$\'`
                    sed -i -e "s/WEBSOCKET_SECRET.*/WEBSOCKET_SECRET: \$WEB/g" Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml
