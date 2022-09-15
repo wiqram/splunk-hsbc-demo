@@ -8,7 +8,7 @@ pipeline {
      stage("Get secret"){
         steps{
              sh """#!/bin/bash
-                   curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/kv/data/yolo/xmatters > out.json
+                   curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET $VAULT_ADDR/v1/kv/data/xmatters > out.json
                    cat out.json
                    WEB=`cat out.json | grep -o \'"WEBSOCKET_SECRET":"[^"]*\' | grep -o \'[^\"]*\$\'`
                    OWNER=`cat out.json | grep -o \'"OWNER_API_KEY":"[^"]*\' | grep -o \'[^"]*\$\'`
