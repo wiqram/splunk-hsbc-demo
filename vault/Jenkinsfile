@@ -31,6 +31,7 @@ pipeline {
                sh(
                   script:
                          """\
+                        kubectl delete --ignore-not-found=true -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml 
                         kubectl apply -f ./Automation/xMatters_k8_stuff/xm-labs-xagent-on-kubernetes-master/files/kube/xagent-secrets.yaml
                          """,
                       )
