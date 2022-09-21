@@ -1,4 +1,5 @@
-# Script to get certificate details and renew the appropriate one 
+# Sample script to get certificate details and renew the appropriate one 
+# This script is for demonstrating the API usage, not for deployment in a production environment
 
 from datetime import datetime, timezone
 import time
