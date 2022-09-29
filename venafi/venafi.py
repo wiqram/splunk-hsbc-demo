@@ -11,12 +11,18 @@ import dateutil.parser
 venafi_api_url = "https://api.venafi.cloud/outagedetection/v1/"
 api_key = "8f67c5e6-04d3-4e2b-8575-1034632b891f" 
 content_type = 'application/json'
+content_type_text = 'text/plain'
+cert_download_type = '/contents?format=PEM&chainOrder=EE_ONLY'
+#cert_id_download = 'fb5cab20-3d91-11ed-9ed4-7d61a4a777f8'
+
+#Cert download location 
+cert_download_location = "/usr/app/src/"
 
 # CSR file location
-cert_csr_file = "/usr/app/src/domain.csr"
+cert_csr_file = "/usr/app/src/cert.csr"
 
 # New validity 
-new_validity = "P1D" # P1D, means extend by one Day
+new_validity = "P2D" # P2D, means extend by two Days
 
 # Global variables
 global app_id 
@@ -25,6 +31,7 @@ global certificate_id
 global cert_csr 
 global json_data
 global validity_end_date 
+#global certificate_name
 
 
 while True:
@@ -100,6 +107,16 @@ while True:
             #print(get_json_entity(object_to_loops,"name"))
             entity_found=get_json_entity(object_to_loops,my_entity)
         return entity_found
+    
+    def create_dict(range, values):
+        dicts = {}
+        keys = range(4)
+        values = ["Hi", "I", "am", "John"]
+        for i in keys:
+            for x in values:
+                dicts[i] = x
+        print(dicts)
+    
     # Request to search certificates
     response = send_request("certificatesearch", "post", data_certificatesearch, api_key, content_type)
     
@@ -123,16 +140,18 @@ while True:
 
     for i in range(len(cert_details)):
         cert_json=cert_details[i]
-        #print(cert_json)
-        print("Found Certificate with Name: " + get_json_entity(cert_json,"certificateName")+ " and ID: " + get_json_entity(cert_json,"id") )
-        #print("Certificate versionType " + get_json_entity(cert_json,"versionType"))
-        #print("Certificate endValidity " + get_json_entity(cert_json,"validityEnd"))
-        if (get_json_entity(cert_json,"versionType") != "OLD"):
+        print("-----------------------------------------------------------------------------")
+        print("Certificate ID " + get_json_entity(cert_json,"id"))
+        print("Certificate Status " + get_json_entity(cert_json,"certificateStatus"))
+        print("Certificate Name " + get_json_entity(cert_json,"certificateName"))
+        print("Certificate versionType " + get_json_entity(cert_json,"versionType"))
+        
+        if (get_json_entity(cert_json,"certificateStatus") != "RETIRED"):
             cert_id=get_json_entity(cert_json,"id")
             #print("Certificate endValidity " + get_json_entity(cert_json,"validityEnd"))
             validity_end_date = dateutil.parser.parse(get_json_entity(cert_json,"validityEnd"))
             diffretiation = validity_end_date - now
-            if diffretiation.days < 1:
+            if diffretiation.days < 2:
                 print("WARNING: Certificate with Name: " + get_json_entity(cert_json,"certificateName")+ ", with ID, " + cert_id + ", about to expire." )
                 certificate_id=cert_id 
             app_instances=get_json_entity(cert_json,"instances")
@@ -167,18 +186,50 @@ while True:
             
             # Request to renew certificates
             response = send_request("certificaterequests", "post", data_certificate_renew, api_key, content_type)
-            
+            json_object = response.json()
+            #cert_details=get_json_entity(json_object,"certificateIds")
+            #new_cert_id=json_object['certificateRequests'][0]['certificateIds'][0]
+
             if response.status_code == 201 or response.status_code == 200:
                 print ("SUCCESS: Certificate with ID: "+ certificate_id + " renewed.")
+                time.sleep(10)
+                # To get all the certs including new 
+                new_response = send_request("certificatesearch", "post", data_certificatesearch, api_key, content_type)
+                if new_response.status_code == 201 or new_response.status_code == 200:
+                    new_json_object = new_response.json()
+                else:
+                    print("Failed to get proper response for new certificate search")
+                new_cert_details=get_json_entity(new_json_object,"certificates")
+                for i in range(len(new_cert_details)):
+                    cert_json=new_cert_details[i]
+                    if (get_json_entity(cert_json,"certificateStatus") != "RETIRED"):
+                        if (get_json_entity(cert_json,"versionType") != "OLD"):
+                            new_cert_id=get_json_entity(cert_json,"id")
+                            print("Got new Certificate with ID: "+ new_cert_id )
+
+                        #certificate_id = cert_id
+                # new - for download
+                try:
+                    response = send_request("certificates/"+ new_cert_id + cert_download_type, "get", data_app, api_key, content_type_text)    
+                    with open(cert_download_location +"new_cert.pem", "wb") as file: 
+                        file.write(response.content)
+                    print("SUCCESS: Downloaded renewed certificate from Venafi with ID: "+ new_cert_id)
+                except:
+                    print("FAILED: To download the certificate from Venafi")
             else:
                 print("FAILED: To renew Certificate with ID: "+ certificate_id )
-            print("---------------------------------------------------------")
+            print("**********************************************************************")
 
     print ("SLEEPING NOW...")
     time.sleep((60.0 - ((time.time() - starttime) % 60.0))*1380) # 60(sec) i.e. 1 min x (24*60=1440 (removing 60 min as grace time))
     #time.sleep(sleep_timer)
 
+
+
+
 print("Script execution done.")
 
+
+ 
 
  
