@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     sh 'pwd'
-                    sh 'docker login -u=jeveenj -p=$DOCKER_TOKEN && docker compose -f venafi-docker-compose.yaml build && docker compose -f venafi-docker-compose.yaml push'
+                    sh 'docker login -u=jeveenj -p=$DOCKER_TOKEN && docker compose -f ./venafi/venafi-docker-compose.yaml build && docker compose -f ./venafi/venafi-docker-compose.yaml push'
                     
                 }
             }
