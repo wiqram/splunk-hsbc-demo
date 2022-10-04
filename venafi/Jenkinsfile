@@ -1,6 +1,25 @@
 pipeline {
     agent none
+  environment {
+       DOCKER_TOKEN = credentials('jjdocker')
+   }
   stages {
+        stage('Build and Push Venafi App Images ') {
+            agent {
+                kubernetes {
+                    cloud 'kubernetes'
+                    label 'kubeagent'
+                    defaultContainer 'docker-agent'
+                }
+            }
+            steps {
+                script {
+                    sh 'pwd'
+                    sh 'docker login -u=jeveenj -p=$DOCKER_TOKEN && docker compose -f venafi-docker-compose.yaml build && docker compose -f venafi-docker-compose.yaml push'
+                    
+                }
+            }
+        }
     stage('Venafi Script Container Deployment') {
      agent {
             kubernetes {
