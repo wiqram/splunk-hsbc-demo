@@ -9,7 +9,7 @@ import dateutil.parser
 
 # Details related to venafi
 venafi_api_url = "https://api.venafi.cloud/outagedetection/v1/"
-api_key = "8f67c5e6-04d3-4e2b-8575-1034632b891f" 
+api_key = "dbd3fa75-6b3a-492d-95d5-019b89b413c9" 
 content_type = 'application/json'
 content_type_text = 'text/plain'
 cert_download_type = '/contents?format=PEM&chainOrder=EE_ONLY'
