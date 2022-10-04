@@ -33,6 +33,7 @@ pipeline {
                sh(
                   script:
                          """\
+                        kubectl delete --ignore-not-found=true -f ./venafi/venafi_deployment.yaml 
                         kubectl apply -f ./venafi/venafi_deployment.yaml
                          """,
                       )
