@@ -107,16 +107,7 @@ while True:
             #print(get_json_entity(object_to_loops,"name"))
             entity_found=get_json_entity(object_to_loops,my_entity)
         return entity_found
-    
-    def create_dict(range, values):
-        dicts = {}
-        keys = range(4)
-        values = ["Hi", "I", "am", "John"]
-        for i in keys:
-            for x in values:
-                dicts[i] = x
-        print(dicts)
-    
+       
     # Request to search certificates
     response = send_request("certificatesearch", "post", data_certificatesearch, api_key, content_type)
     
