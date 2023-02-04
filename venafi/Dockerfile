@@ -10,6 +10,5 @@ RUN set -x && \
 COPY venafi.py ./
 COPY cert.csr ./
 COPY key.pem ./
-COPY cert.pem ./
 #RUN openssl pkcs12 -help
 CMD [ "python", "-u","./venafi.py"]

@@ -13,6 +13,7 @@ api_key = "70402cab-746c-481d-980b-fe89bc67b4c8"
 content_type = 'application/json'
 content_type_text = 'text/plain'
 cert_download_type = '/contents?format=PEM&chainOrder=EE_ONLY'
+template_name = "NTT Template"
 #cert_id_download = 'fb5cab20-3d91-11ed-9ed4-7d61a4a777f8'
 
 #Cert download location 
@@ -48,7 +49,7 @@ while True:
                         {
                             "field": "validityEnd",
                             "operator": "GT",
-                            "value": "2022-09-03T11:17:10.720+00:00" #datetime.now((timezone.utc)).isoformat()
+                            "value": "2023-02-03T11:17:10.720+00:00" #datetime.now((timezone.utc)).isoformat()
                         }
                     ]
                 }
@@ -64,7 +65,7 @@ while True:
         },
         "paging": {
             "pageNumber": 0,
-            "pageSize": 10
+            "pageSize": 20
         }
     }
 
@@ -136,80 +137,91 @@ while True:
         print("Certificate Status " + get_json_entity(cert_json,"certificateStatus"))
         print("Certificate Name " + get_json_entity(cert_json,"certificateName"))
         print("Certificate versionType " + get_json_entity(cert_json,"versionType"))
-        
-        if (get_json_entity(cert_json,"certificateStatus") != "RETIRED"):
-            cert_id=get_json_entity(cert_json,"id")
-            #print("Certificate endValidity " + get_json_entity(cert_json,"validityEnd"))
-            validity_end_date = dateutil.parser.parse(get_json_entity(cert_json,"validityEnd"))
-            diffretiation = validity_end_date - now
-            if diffretiation.days < 2:
-                print("WARNING: Certificate with Name: " + get_json_entity(cert_json,"certificateName")+ ", with ID, " + cert_id + ", about to expire." )
-                certificate_id=cert_id 
-            app_instances=get_json_entity(cert_json,"instances")
 
-            # Loop to get Application ID
-            for j in range(len(app_instances)):
-                app_details=app_instances[j]
-                application_Ids=get_json_entity(app_details,"applicationIds")
-                # Only a single App ID required for renew https://docs.venafi.cloud/api/renewing-a-certificate-api/
-                app_id = application_Ids[0]
-            # Request to search applications
-            response = send_request("applications", "get", data_app, api_key, content_type)
-            json_object = response.json()
-            all_app_details=get_json_entity(json_object,"applications")
+        # For Demo purpose, selecting only the localhost cert 
+        if get_json_entity(cert_json,"certificateName") == "localhost":
+            if (get_json_entity(cert_json,"certificateStatus") != "RETIRED"):
+                cert_id=get_json_entity(cert_json,"id")
+                #print("Certificate endValidity " + get_json_entity(cert_json,"validityEnd"))
+                validity_end_date = dateutil.parser.parse(get_json_entity(cert_json,"validityEnd"))
+                diffretiation = validity_end_date - now
+                if diffretiation.days < 2:
+                    print("WARNING: Certificate with Name: " + get_json_entity(cert_json,"certificateName")+ ", with ID, " + cert_id + ", about to expire." )
+                    certificate_id=cert_id 
+                app_instances=get_json_entity(cert_json,"instances")
 
-            # Loop to get template ID
-            for k in range(len(all_app_details)):
-                all_app_detail=all_app_details[k]
-                app=all_app_detail['certificateIssuingTemplateAliasIdMap']
-                if get_json_entity(all_app_detail,"id") == app_id:
-                    # Only a single template ID required for renew https://docs.venafi.cloud/api/renewing-a-certificate-api/
-                    template_id=list(app.values())[0]
-            
-            data_certificate_renew = {
-                #"certificateOwnerUserId": "54f59c20-2ad0-11ed-90f1-4792aa1219bb",
-                "certificateSigningRequest": cert_csr,
-                "applicationId": app_id,
-                "certificateIssuingTemplateId": template_id,
-                "validityPeriod": new_validity,
-                "existingCertificateId": certificate_id
-            }
-            
-            # Request to renew certificates
-            response = send_request("certificaterequests", "post", data_certificate_renew, api_key, content_type)
-            json_object = response.json()
-            #cert_details=get_json_entity(json_object,"certificateIds")
-            #new_cert_id=json_object['certificateRequests'][0]['certificateIds'][0]
+                # Loop to get Application ID
+                for j in range(len(app_instances)):
+                    app_details=app_instances[j]
+                    application_Ids=get_json_entity(app_details,"applicationIds")
+                    # Only a single App ID required for renew https://docs.venafi.cloud/api/renewing-a-certificate-api/
+                    app_id = application_Ids[0]
+                # Request to search applications
+                response = send_request("applications", "get", data_app, api_key, content_type)
+                json_object = response.json()
+                all_app_details=get_json_entity(json_object,"applications")
 
-            if response.status_code == 201 or response.status_code == 200:
-                print ("SUCCESS: Certificate with ID: "+ certificate_id + " renewed.")
-                time.sleep(10)
-                # To get all the certs including new 
-                new_response = send_request("certificatesearch", "post", data_certificatesearch, api_key, content_type)
-                if new_response.status_code == 201 or new_response.status_code == 200:
-                    new_json_object = new_response.json()
-                else:
-                    print("Failed to get proper response for new certificate search")
-                new_cert_details=get_json_entity(new_json_object,"certificates")
-                for i in range(len(new_cert_details)):
-                    cert_json=new_cert_details[i]
-                    if (get_json_entity(cert_json,"certificateStatus") != "RETIRED"):
-                        if (get_json_entity(cert_json,"versionType") != "OLD"):
-                            new_cert_id=get_json_entity(cert_json,"id")
-                            print("Got new Certificate with ID: "+ new_cert_id )
-
-                        #certificate_id = cert_id
-                # new - for download
+                # Loop to get template ID
+                for k in range(len(all_app_details)):
+                    all_app_detail=all_app_details[k]
+                    app=all_app_detail['certificateIssuingTemplateAliasIdMap']
+                    if get_json_entity(all_app_detail,"id") == app_id:
+                        # Only a single template ID required for renew https://docs.venafi.cloud/api/renewing-a-certificate-api/
+                        print("template id ->",app[template_name])
+                        template_id=list(app.values())[0]
+                
+                # To get specific template
                 try:
-                    response = send_request("certificates/"+ new_cert_id + cert_download_type, "get", data_app, api_key, content_type_text)    
-                    with open(cert_download_location +"new_cert.pem", "wb") as file: 
-                        file.write(response.content)
-                    print("SUCCESS: Downloaded renewed certificate from Venafi with ID: "+ new_cert_id)
+                    if template_id is not None:
+                        pass
                 except:
-                    print("FAILED: To download the certificate from Venafi")
-            else:
-                print("FAILED: To renew Certificate with ID: "+ certificate_id )
-            print("**********************************************************************")
+                    template_id = app[template_name]
+
+
+                data_certificate_renew = {
+                    #"certificateOwnerUserId": "54f59c20-2ad0-11ed-90f1-4792aa1219bb",
+                    "certificateSigningRequest": cert_csr,
+                    "applicationId": app_id,
+                    "certificateIssuingTemplateId": template_id,
+                    "validityPeriod": new_validity,
+                    "existingCertificateId": certificate_id
+                }
+                
+                # Request to renew certificates
+                response = send_request("certificaterequests", "post", data_certificate_renew, api_key, content_type)
+                json_object = response.json()
+                #cert_details=get_json_entity(json_object,"certificateIds")
+                #new_cert_id=json_object['certificateRequests'][0]['certificateIds'][0]
+
+                if response.status_code == 201 or response.status_code == 200:
+                    print ("SUCCESS: Certificate with ID: "+ certificate_id + " renewed.")
+                    time.sleep(10)
+                    # To get all the certs including new 
+                    new_response = send_request("certificatesearch", "post", data_certificatesearch, api_key, content_type)
+                    if new_response.status_code == 201 or new_response.status_code == 200:
+                        new_json_object = new_response.json()
+                    else:
+                        print("Failed to get proper response for new certificate search")
+                    new_cert_details=get_json_entity(new_json_object,"certificates")
+                    for i in range(len(new_cert_details)):
+                        cert_json=new_cert_details[i]
+                        if (get_json_entity(cert_json,"certificateStatus") != "RETIRED"):
+                            if (get_json_entity(cert_json,"versionType") != "OLD"):
+                                new_cert_id=get_json_entity(cert_json,"id")
+                                print("Got new Certificate with ID: "+ new_cert_id )
+
+                            #certificate_id = cert_id
+                    # new - for download
+                    try:
+                        response = send_request("certificates/"+ new_cert_id + cert_download_type, "get", data_app, api_key, content_type_text)    
+                        with open(cert_download_location +"new_cert.pem", "wb") as file: 
+                            file.write(response.content)
+                        print("SUCCESS: Downloaded renewed certificate from Venafi with ID: "+ new_cert_id)
+                    except:
+                        print("FAILED: To download the certificate from Venafi")
+                else:
+                    print("FAILED: To renew Certificate with ID: "+ certificate_id )
+                print("**********************************************************************")
 
     print ("SLEEPING NOW...")
     time.sleep((60.0 - ((time.time() - starttime) % 60.0))*1380) # 60(sec) i.e. 1 min x (24*60=1440 (removing 60 min as grace time))
