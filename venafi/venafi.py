@@ -23,7 +23,7 @@ cert_download_location = "/usr/app/src/"
 cert_csr_file = "/usr/app/src/cert.csr"
 
 # New validity 
-new_validity = "P2D" # P2D, means extend by two Days
+new_validity = "P1D" # P2D, means extend by two Days
 
 # Global variables
 global app_id 
