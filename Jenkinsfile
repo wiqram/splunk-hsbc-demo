@@ -70,7 +70,7 @@ pipeline {
             echo "Security check done"
         }
         } */
-    /* stage('Deploy Splunk Configs') {
+     stage('Deploy Splunk Configs') {
      agent {
             kubernetes {
                 cloud 'kubernetes'
@@ -88,7 +88,7 @@ pipeline {
                      sleep(time:30,unit:"SECONDS")
                }
             }
-        } */
+        } 
        /*
        JEVEEN TO WORK ON THIS DOCKER COMPOSE STEP OF PIPELINE
        stage('Build and Push Docker Images') {
